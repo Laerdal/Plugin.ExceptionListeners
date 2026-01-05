@@ -4,18 +4,29 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-
+  <!-- ==================== INTERNAL DEPENDENCIES ==================== -->
+  <ItemGroup>
+    <PackageVersion Include="Plugin.ByteArrays" Version="1.0.27" />
+    <PackageVersion Include="Plugin.ExceptionListeners" Version="1.0.3" />
+    <PackageVersion Include="Plugin.BaseTypeExtensions" Version="1.0.18" />
+    <PackageVersion Include="Plugin.ExceptionListeners.Maui" Version="1.0.3" />
+  </ItemGroup>
   <!-- ==================== CORE DEPENDENCIES ==================== -->
   <ItemGroup>
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.1" />
   </ItemGroup>
-
   <!-- ==================== MAUI DEPENDENCIES ==================== -->
   <ItemGroup>
     <PackageVersion Include="Microsoft.Maui.Core" Version="$(MauiVersion)" />
     <PackageVersion Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageVersion Include="Microsoft.Maui.Essentials" Version="$(MauiVersion)" />
   </ItemGroup>
-
+  <!-- ==================== COMMUNITY DEPENDENCIES ==================== -->
+  <ItemGroup>
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageVersion Include="CommunityToolkit.Maui" Version="12.3.0" />
+  </ItemGroup>
   <!-- ==================== TEST DEPENDENCIES ==================== -->
   <ItemGroup>
     <!-- FluentAssertions versions 8+ are free for open source projects                -->
@@ -27,15 +38,18 @@
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
   </ItemGroup>
-
   <!-- ==================== BUILD & ANALYSIS DEPENDENCIES ==================== -->
   <ItemGroup>
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.101" />
   </ItemGroup>
-
+  <!-- ==================== LOGGING DEPENDENCIES ==================== -->
+  <ItemGroup>
+    <PackageVersion Include="NLog.Extensions.Logging" Version="6.1.0" />
+    <PackageVersion Include="NLog.Targets.MauiLog" Version="10.0.3" />
+  </ItemGroup>
 </Project>
