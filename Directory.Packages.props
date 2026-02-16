@@ -35,7 +35,7 @@
     <!-- Version 7 will remain fully open source indefinitely and receive              -->
     <!-- bugfixes and other important corrections                                      -->
     <PackageVersion Include="FluentAssertions" Version="7.2.0" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="coverlet.collector" Version="8.0.0" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
