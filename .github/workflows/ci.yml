@@ -59,7 +59,7 @@ jobs:
       has-tests: ${{ steps.test-artifact-check.outputs.found }}
     steps:
       - name: '🔄 Checkout'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: '⬇️ Download Version artifact'
         uses: actions/download-artifact@v8
@@ -235,7 +235,7 @@ jobs:
     needs: [version, publish-nuget]
     steps:
       - name: '🔄 Checkout'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           fetch-tags: true
