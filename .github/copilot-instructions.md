@@ -17,7 +17,7 @@ consistent event model — plus a `.Maui` companion package for native platform 
 
 ## Technology Stack
 
-- **Framework:** .NET 10.0 (SDK `10.0.100`, see `global.json`)
+- **SDK:** .NET SDK `10.0.100` (see `global.json`); projects target `net9.0` (core/tests) and `net10.0*` (MAUI)
 - **Language:** C# (latest)
 - **Testing:** xUnit + FluentAssertions (v7.x — stays open source indefinitely per Directory.Packages.props comment)
 - **Package Management:** Central Package Management (`Directory.Packages.props`)
