@@ -214,7 +214,7 @@ jobs:
         with:
           file: coverage.cobertura.xml
           language: C#
-          label: code-coverage-agent
+          label: coverlet
 
   publish-nuget:
     name: '🚀 Publish to NuGet.org'
