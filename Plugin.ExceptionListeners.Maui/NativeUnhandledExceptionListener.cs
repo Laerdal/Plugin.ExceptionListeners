@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Plugin.ExceptionListeners.Maui;
 
 /// <summary>
@@ -10,6 +12,29 @@ public class NativeUnhandledExceptionListener : ExceptionListener
     /// </summary>
     /// <param name="received">The event handler to invoke when an exception is received.</param>
     public NativeUnhandledExceptionListener(EventHandler<ExceptionEventArgs> received) : base(received)
+    {
+        Subscribe();
+    }
+
+    /// <summary>
+    ///     Releases the unmanaged resources used by the <see cref="NativeUnhandledExceptionListener"/> and optionally releases the managed resources.
+    /// </summary>
+    /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            Unsubscribe();
+        }
+        base.Dispose(disposing);
+    }
+
+    // The platform-specific bodies live here, not inline in the constructor / Dispose: on the plain net10.0 target
+    // (and in static analysis, which builds without any platform symbol) they compile to nothing, and an inline
+    // `if (disposing) { }` would then be an empty conditional. CA1822 only fires on that plain target, where the
+    // body is empty; on every platform target these members use `this`.
+    [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Instance members on the platform targets; empty only on plain net10.0.")]
+    private void Subscribe()
     {
 #if IOS || MACCATALYST
         Runtime.MarshalObjectiveCException += RuntimeOnMarshalObjectiveCException;
@@ -25,28 +50,21 @@ public class NativeUnhandledExceptionListener : ExceptionListener
 #endif
     }
 
-    /// <summary>
-    ///     Releases the unmanaged resources used by the <see cref="NativeUnhandledExceptionListener"/> and optionally releases the managed resources.
-    /// </summary>
-    /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-    protected override void Dispose(bool disposing)
+    [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Instance members on the platform targets; empty only on plain net10.0.")]
+    private void Unsubscribe()
     {
-        if (disposing)
-        {
 #if IOS || MACCATALYST
-            Runtime.MarshalObjectiveCException -= RuntimeOnMarshalObjectiveCException;
-            Runtime.MarshalManagedException -= RuntimeOnMarshalManagedException;
+        Runtime.MarshalObjectiveCException -= RuntimeOnMarshalObjectiveCException;
+        Runtime.MarshalManagedException -= RuntimeOnMarshalManagedException;
 #endif
 
 #if ANDROID
-            AndroidEnvironment.UnhandledExceptionRaiser -= AndroidEnvironmentOnUnhandledExceptionRaiser;
+        AndroidEnvironment.UnhandledExceptionRaiser -= AndroidEnvironmentOnUnhandledExceptionRaiser;
 #endif
 
 #if WINDOWS
-            Windows.ApplicationModel.Core.CoreApplication.UnhandledErrorDetected -= OnUnhandledErrorDetected;
+        Windows.ApplicationModel.Core.CoreApplication.UnhandledErrorDetected -= OnUnhandledErrorDetected;
 #endif
-        }
-        base.Dispose(disposing);
     }
 
 #if IOS || MACCATALYST
