@@ -57,6 +57,7 @@ jobs:
     outputs:
       has-docs: ${{ steps.check-docs.outputs.exists }}
       has-tests: ${{ steps.test-artifact-check.outputs.found }}
+      has-coverage: ${{ steps.coverage-artifact-check.outputs.found }}
     steps:
       - name: '🔄 Checkout'
         uses: actions/checkout@v7
@@ -141,6 +142,24 @@ jobs:
           name: tests
           path: 'Output/Tests/'
 
+      - name: '🔍 Check for coverage report'
+        id: coverage-artifact-check
+        run: |
+          if [ -f "${{ github.workspace }}/Output/Tests/coverage.cobertura.xml" ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No coverage report found. Skipping coverage artifact upload."
+          fi
+
+      - name: '📦 Upload coverage artifact'
+        uses: actions/upload-artifact@v7
+        if: ${{ success() && !cancelled() && steps.coverage-artifact-check.outputs.found == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+        with:
+          name: coverage-report-csharp
+          path: 'Output/Tests/coverage.cobertura.xml'
+          if-no-files-found: error
+
       # ============================ DOCS ============================
       - name: '🔍 Check if docs are needed'
         id: check-docs
@@ -175,6 +194,27 @@ jobs:
           path: '${{ github.workspace }}/${{ env.DOCS_PATH }}/site'
           name: github-pages
 
+
+  upload-coverage-csharp:
+    name: '📊 Upload Code Coverage (C#)'
+    if: ${{ !cancelled() && needs.build.result == 'success' && needs.build.outputs.has-coverage == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+      code-quality: write
+    steps:
+      - name: '⬇️ Download coverage artifact'
+        uses: actions/download-artifact@v8
+        with:
+          name: coverage-report-csharp
+
+      - name: '📊 Upload coverage to GitHub'
+        uses: actions/upload-code-coverage@v1
+        with:
+          file: coverage.cobertura.xml
+          language: C#
+          label: code-coverage-agent
 
   publish-nuget:
     name: '🚀 Publish to NuGet.org'
